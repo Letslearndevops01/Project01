@@ -43,7 +43,7 @@ jobs:
             fi
 
             # Check Jira format
-            if [[ "$line" =~ ^Devops1: .+ ]]; then
+            if [[ "$line" =~ ^Devops1:\ .+ ]]; then
               echo "✅ Valid: $line"
             else
               echo "❌ Invalid commit message: $line"
