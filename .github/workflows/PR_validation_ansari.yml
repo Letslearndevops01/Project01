@@ -1,0 +1,62 @@
+name: Validate Commit Messages
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  validate-commit-message:
+    name: Validate Commit Messages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history for commit messages
+
+      - name: Validate commit messages
+        run: |
+          echo "Validating commit messages..."
+          # Regex: must contain RAYS- followed by exactly 4 digits
+          regex="RAYS-[0-9]{4}"
+
+          # Auto-generated messages to ignore
+          ignore_patterns=(
+            "^Merge branch"
+            "^Merge pull request"
+            "^Update dependencies"
+            "^Dependabot"
+            "^Bump "
+          )
+
+          # Get all commit messages in the PR
+          commits=$(git log --pretty=format:"%s" origin/main..HEAD)
+
+          failed=false
+          while IFS= read -r commit; do
+            echo "Checking: $commit"
+
+            # Skip ignored commit messages
+            for pattern in "${ignore_patterns[@]}"; do
+              if [[ "$commit" =~ $pattern ]]; then
+                echo "✅ Ignored auto-generated commit: $commit"
+                continue 2
+              fi
+            done
+
+            # Check regex
+            if [[ ! "$commit" =~ $regex ]]; then
+              echo "❌ Commit message does not match required pattern (RAYS-XXXX): $commit"
+              failed=true
+            fi
+          done <<< "$commits"
+
+          if [ "$failed" = true ]; then
+            echo "❌ Some commit messages are invalid."
+            exit 1
+          else
+            echo "✅ All commit messages are valid."
+          fi
