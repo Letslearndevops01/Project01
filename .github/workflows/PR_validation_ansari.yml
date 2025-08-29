@@ -8,6 +8,7 @@ on:
 
 jobs:
   validate-commit-message:
+    name: Validate Commit Messages
     runs-on: ubuntu-latest
 
     steps:
