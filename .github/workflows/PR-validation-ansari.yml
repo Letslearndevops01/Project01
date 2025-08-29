@@ -2,14 +2,16 @@ name: Validate Commit Messages
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize]
+  push:
     branches:
       - main
 
 jobs:
-  validate-commit-message:
-    name: Validate Commit Messages
+  validate-commits:
+    name: Validate Commit Messages   # 👈 job name matches workflow name
     runs-on: ubuntu-latest
+
 
     steps:
       - name: Checkout code
