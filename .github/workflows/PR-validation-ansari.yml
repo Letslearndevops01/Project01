@@ -29,6 +29,7 @@ jobs:
           ignore_patterns=(
             "^Merge branch"
             "^Merge pull request"
+            "^Merge "
             "^Update dependencies"
             "^Dependabot"
             "^Bump "
