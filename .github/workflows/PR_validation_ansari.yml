@@ -8,8 +8,7 @@ on:
 
 jobs:
   validate-commit-message:
-    name: Validate Commit Messages
-    runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
